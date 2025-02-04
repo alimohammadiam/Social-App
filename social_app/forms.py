@@ -9,18 +9,22 @@ class LoginForm(AuthenticationForm):
 
 
 class UserRegisterForm(forms.ModelForm):
-    password = forms.CharField(max_length=20, widget=forms.PasswordInput(), label='رمز عبور')
-    password_2 = forms.CharField(max_length=20, widget=forms.PasswordInput(), label='تکرار رمز عبور')
+    password = forms.CharField(max_length=20, required=True, widget=forms.PasswordInput, label='رمز عبور')
+    password2 = forms.CharField(max_length=20, required=True, widget=forms.PasswordInput, label='تکرار رمز عبور')
 
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'phone']
 
-    def clean_password(self):
-        cd = self.cleaned_data
-        if cd['password'] != cd['password_2']:
-            raise forms.ValidationError('رمز ها مطابقت ندارند!')
-        return cd['password_2']
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get('password')
+        password2 = cleaned_data.get('password2')
+
+        if password and password2 and password != password2:
+            raise forms.ValidationError('رمزها مطابقت ندارند!')
+
+        return cleaned_data
 
     def clean_phone(self):
         phone = self.cleaned_data['phone']
