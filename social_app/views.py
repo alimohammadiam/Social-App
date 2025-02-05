@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 from django.http import HttpResponse
 from .forms import *
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 
 # Create your views here.
 
@@ -44,6 +45,20 @@ def user_edit(request):
     return render(request, 'registration/edit_user.html', context)
 
 
+def ticket(request):
+    send = False
+    if request.method == 'POST':
+        form = TicketForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            message = f"{cd['name']}\n{cd['email']}\n{cd['phone']}\n\n{cd['message']}"
+            send_mail(cd['subject'], message, 'ali0182mohammadi@gmail.com',
+                      ['alimohammadi.dev01@gmail.com'], fail_silently=False)
+            send = True
+    else:
+        form = TicketForm()
+
+    return render(request, 'forms/ticket.html', {'form': form, 'send': send})
 
 
 

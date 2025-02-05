@@ -13,5 +13,6 @@ urlpatterns = [
     path('login/', auth_view.LoginView.as_view(authentication_form=LoginForm), name='login'),
     path('register/', views.register, name='register'),
     path('user/edit/', views.user_edit, name='user_edit'),
+    path('ticket', views.ticket, name='ticket')
 
 ]
