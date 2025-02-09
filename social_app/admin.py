@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User
+from .models import User, Post
 from django.contrib.auth.admin import UserAdmin
 
 # Register your models here.
@@ -15,3 +15,10 @@ class UserAdmin(UserAdmin):
             ],
         }),
     )
+
+
+@admin.register(Post)
+class PostAdmin(admin.ModelAdmin):
+    list_display = ['author', 'created', 'update']
+    ordering = ['-created']
+    search_fields = ['description']

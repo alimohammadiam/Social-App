@@ -25,5 +25,9 @@ urlpatterns = [
     path('password-change/', auth_view.PasswordChangeView.as_view(success_url='done'), name='password_change'),
     path('password-change/done/', auth_view.PasswordChangeDoneView.as_view(), name='password_change_done'),
 
+    path('posts/', views.post_list, name='post_list'),
+    path('posts/post/<slug:tag_slug/>', views.post_list, name='post_list_by_tag'),
+    path('posts/create-post', views.create_post, name='create_post'),
+
 
 ]
