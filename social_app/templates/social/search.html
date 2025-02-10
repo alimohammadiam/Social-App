@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Post Search</title>
+</head>
+<body>
+    {% include 'partials/header.html' %}
+    <br>
+
+    {% if query %}
+        <hr>
+        نتیجه جستجو برای {{ query }} : {{ results.count }}
+        <hr>
+    {% endif %}
+    <br>
+    {% for post in results %}
+        <a href="{{ post.get_absolute_url }}">{{ post.description|truncatewords:10 }}... ({{ post.author }})</a>
+        <br>
+        <br>
+        <br>
+    {% empty %}
+        هیچ نتیجه ای یافت نشد !
+    {% endfor %}
+
+</body>
+</html>

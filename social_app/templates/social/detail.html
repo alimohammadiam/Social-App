@@ -5,6 +5,7 @@
     <title>Detail</title>
 </head>
 <body>
+{% include 'partials/header.html' %}
 
 {{ post.description|linebreaks }}
 published by {{ post.created }} by {{ post.author }}

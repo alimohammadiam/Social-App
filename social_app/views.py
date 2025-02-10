@@ -106,6 +106,22 @@ def post_detail(request, pk):
     return render(request, 'social/detail.html', context)
 
 
+def post_search(request):
+    query = None
+    results = []
+    if 'query' in request.GET:
+        form = PostSearchForm(data=request.GET)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            results = Post.objects.filter(description__icontains=query)
+
+    context = {
+        'query': query,
+        'results': results,
+    }
+    return render(request, 'social/search.html', context)
+
+
 
 
 

@@ -79,6 +79,10 @@ class CreatePostForm(forms.ModelForm):
         fields = ['description', 'tags']
 
 
+class PostSearchForm(forms.Form):
+    query = forms.CharField()
+
+
 
 
 
