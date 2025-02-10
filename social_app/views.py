@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django.shortcuts import render
 from django.contrib.auth import logout
 from django.shortcuts import redirect, get_object_or_404
@@ -94,9 +95,13 @@ def create_post(request):
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, id=pk)
+    post_tags_ids = post.tags.values_list('id', flat=True)
+    similar_post = Post.objects.filter(tags__in=post_tags_ids).exclude(id=post.id)
+    similar_post = similar_post.annotate(same_tags=Count('tags')).order_by('-same_tags', '-created')[:2]
 
     context = {
-        'post': post
+        'post': post,
+        'similar_post': similar_post,
     }
     return render(request, 'social/detail.html', context)
 
