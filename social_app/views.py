@@ -92,7 +92,13 @@ def create_post(request):
         return render(request, 'forms/create-post.html', form)
 
 
+def post_detail(request, pk):
+    post = get_object_or_404(Post, id=pk)
 
+    context = {
+        'post': post
+    }
+    return render(request, 'social/detail.html', context)
 
 
 

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.urls import reverse
 from taggit.managers import TaggableManager
 
 # Create your models here.
@@ -26,8 +27,11 @@ class Post(models.Model):
             models.Index(fields=['-created'])
         ]
 
-        verbose_name = 'نویسنده'
-        verbose_name_plural = 'نویسنده ها'
+        verbose_name = 'پست'
+        verbose_name_plural = 'پست ها'
 
     def __str__(self):
         return self.author.first_name
+
+    def get_absolute_url(self):
+        return reverse('social:post_detail', args=[self.id])

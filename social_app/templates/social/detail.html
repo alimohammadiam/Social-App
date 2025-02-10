@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Detail</title>
+</head>
+<body>
+
+{{ post.description|linebreaks }}
+published by {{ post.created }} by {{ post.author }}
+
+{% for tag in post.tags.all %}
+    <a href="{% url 'social:post_list_by_tag' tag.slug %}">{{ tag.name }}</a>
+    {% if  not forloop.last %}, {% endif %}
+{% endfor %}
+
+</body>
+</html>
