@@ -10,18 +10,26 @@
 
     {% if query %}
         <hr>
-        نتیجه جستجو برای {{ query }} : {{ results.count }}
+        نتیجه جستجو برای {{ query }} : {{ tag_results.count|add:post_results.count }}
         <hr>
     {% endif %}
     <br>
-    {% for post in results %}
+    {% for post_result in tag_results %}
+        <a href="{{ post_result.get_absolute_url }}">{{ post_result.description|truncatewords:10 }}... ({{ post_result.author }})</a>
+        <br>
+        <br>
+        <br>
+    {% endfor %}
+
+    {% for post in post_results %}
         <a href="{{ post.get_absolute_url }}">{{ post.description|truncatewords:10 }}... ({{ post.author }})</a>
         <br>
         <br>
         <br>
-    {% empty %}
-        هیچ نتیجه ای یافت نشد !
     {% endfor %}
+    {% if tag_results == False and post_results == False %}
+        هیچ نتیجه ای یافت نشد !
+    {% endif %}
 
 </body>
 </html>

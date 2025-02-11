@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from .models import Post
 from taggit.models import Tag
+from django.utils.html import escape
 
 # Create your views here.
 
@@ -108,16 +109,21 @@ def post_detail(request, pk):
 
 def post_search(request):
     query = None
-    results = []
+    post_results = []
+    tag_results = []
     if 'query' in request.GET:
         form = PostSearchForm(data=request.GET)
         if form.is_valid():
-            query = form.cleaned_data['query']
-            results = Post.objects.filter(description__icontains=query)
+            query = escape(form.cleaned_data['query'])
+            post_results = Post.objects.filter(description__icontains=query)
+            tag_results = Tag.objects.filter(name__icontains=query)
+            tag_results = Post.objects.filter(tags__in=tag_results)
+            # results = tag_results | post_results
 
     context = {
         'query': query,
-        'results': results,
+        'post_results': post_results,
+        'tag_results': tag_results,
     }
     return render(request, 'social/search.html', context)
 
