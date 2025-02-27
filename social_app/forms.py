@@ -1,5 +1,5 @@
 from django import forms
-from .models import User, Post
+from .models import User, Post, Comments
 from django.contrib.auth.forms import AuthenticationForm
 
 
@@ -81,6 +81,19 @@ class CreatePostForm(forms.ModelForm):
 
 class PostSearchForm(forms.Form):
     query = forms.CharField()
+
+
+class CommentForm(forms.ModelForm):
+    def clean_name(self):
+        name = self.cleaned_data['name']
+        if len(name) < 3:
+            raise forms.ValidationError('نام خیلی کوتاه است!')
+        else:
+            return name
+
+    class Meta:
+        model = Comments
+        fields = ['name', 'body']
 
 
 

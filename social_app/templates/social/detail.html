@@ -16,6 +16,35 @@ published by {{ post.created }} by {{ post.author }}
 {% endfor %}
 
 
+{#    COMMENT POST#}
+<h2>Comments</h2>
+
+{% with comments.count as cm_count %}
+<div>
+    {{ cm_count }}comment{{ cm_count | pluralize }}
+</div>
+    <br><br>
+<div>
+    {% for cm in comments %}
+        {{ cm.name }}
+        {{ cm.body|linebreaks }}
+    {% empty %}
+        کامنتی وجود ندارد!
+    {% endfor %}
+</div>
+
+{% endwith %}
+
+<br><br>
+
+<form  method="post" action="{% url 'social:comment_post' post.id %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="افزودن کامنت">
+</form>
+<br>
+
+
 <h2>Similar posts</h2>
 {% for post in similar_post %}
     <p>
@@ -24,6 +53,8 @@ published by {{ post.created }} by {{ post.author }}
     {% empty %}
         There are no similar post
 {% endfor %}
+
+
 
 </body>
 </html>

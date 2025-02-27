@@ -9,6 +9,7 @@ from django.core.mail import send_mail
 from .models import Post
 from taggit.models import Tag
 from django.utils.html import escape
+from django.views.decorators.http import require_POST
 
 # Create your views here.
 
@@ -94,8 +95,10 @@ def create_post(request):
         return render(request, 'forms/create-post.html', form)
 
 
-def post_detail(request, pk):
-    post = get_object_or_404(Post, id=pk)
+def post_detail(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    comments = post.comments.filter(active=True)
+    form = CommentForm()
     post_tags_ids = post.tags.values_list('id', flat=True)
     similar_post = Post.objects.filter(tags__in=post_tags_ids).exclude(id=post.id)
     similar_post = similar_post.annotate(same_tags=Count('tags')).order_by('-same_tags', '-created')[:2]
@@ -103,6 +106,8 @@ def post_detail(request, pk):
     context = {
         'post': post,
         'similar_post': similar_post,
+        'comments': comments,
+        'form': form,
     }
     return render(request, 'social/detail.html', context)
 
@@ -127,6 +132,22 @@ def post_search(request):
     }
     return render(request, 'social/search.html', context)
 
+
+@require_POST
+def post_comment(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    comment = None
+    form = CommentForm(request.POST)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.post = post
+        comment.save()
+    context = {
+        'post': post,
+        'comment': comment,
+        'form': form
+    }
+    return render(request, 'forms/comment.html', context)
 
 
 

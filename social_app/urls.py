@@ -28,7 +28,9 @@ urlpatterns = [
     path('posts/', views.post_list, name='post_list'),
     path('posts/<slug:tag_slug>/', views.post_list, name='post_list_by_tag'),
     path('posts/create-post', views.create_post, name='create_post'),
-    path('posts/detail/<pk>', views.post_detail, name='post_detail'),
+    path('posts/detail/<post_id>', views.post_detail, name='post_detail'),
+
+    path('posts/<post_id>/comment', views.post_comment, name='comment_post'),
 
     path('search/', views.post_search, name='post_search'),
 
