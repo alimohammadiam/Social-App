@@ -24,8 +24,11 @@
     <br>
     <br>
 
-
 {% endfor %}
+
+<hr>
+{% include 'partials/pagination.html' with page=posts %}
+<hr>
 
 </body>
 </html>

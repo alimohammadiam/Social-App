@@ -10,6 +10,7 @@ from .models import Post
 from taggit.models import Tag
 from django.utils.html import escape
 from django.views.decorators.http import require_POST
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
 
@@ -72,6 +73,15 @@ def post_list(request, tag_slug=None):
     if tag_slug:
         tag = get_object_or_404(Tag, slug=tag_slug)
         posts = Post.objects.filter(tags__in=[tag])
+
+    paginator = Paginator(posts, 3)
+    page_number = request.GET.get('page', 1)
+    try:
+        posts = paginator.page(page_number)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
 
     context = {
         'posts': posts,
