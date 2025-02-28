@@ -11,7 +11,9 @@
     Post tagged with {{ tag.name }}
 {% endif %}
 
+
 {% for post in posts %}
+    <img width="300" height="200" src="{{ post.images.first.image_field.url }}" alt="{{ post.images.first.title }}">
     <a href="{{ post.get_absolute_url }}">
     {{ post.description|truncatewords:20|linebreaks }}
     </a>
