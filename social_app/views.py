@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from .forms import *
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
-from .models import Post
+from .models import Post, Image
 from taggit.models import Tag
 from django.utils.html import escape
 from django.views.decorators.http import require_POST
@@ -20,8 +20,15 @@ def log_out(request):
     return HttpResponse('شما خارج شدید!')
 
 
+@login_required
 def profile(request):
-    return HttpResponse('شما وارد شدید!')
+    user = request.user
+    posts = Post.objects.filter(author=user)
+
+    context = {
+        'posts': posts
+    }
+    return render(request, 'social/profile.html', context)
 
 
 def register(request):
@@ -93,16 +100,23 @@ def post_list(request, tag_slug=None):
 @login_required()
 def create_post(request):
     if request.method == 'POST':
-        form = CreatePostForm(request.POST)
-        if form.is_valid:
+        form = CreatePostForm(request.POST, request.FILES)
+        if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
             post.save()
-            post.save_m2m()
+            form.save_m2m()
+
+            img1 = Image.objects.create(image_field=form.cleaned_data['image1'], post=post)
+            post.images.add(img1)
+
+            img2 = Image.objects.create(image_field=form.cleaned_data['image2'], post=post)
+            post.images.add(img2)
+
             return redirect('social:profile')
     else:
         form = CreatePostForm()
-        return render(request, 'forms/create-post.html', form)
+        return render(request, 'forms/create-post.html', {'form': form})
 
 
 def post_detail(request, post_id):
