@@ -9,7 +9,34 @@
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
+    {% if post %}
+            {% for img in post.images.all %}
+                <img width="350px" height="250px" src="{{ img.image_file.url }}" alt="{{ img.title }}">
+                <a href="{% url 'social:delete_image' img.id %}">حذف تصویر</a>
+            {% endfor %}
+        {% endif %}
+        <br>
+        <hr>
     <button type="submit">ذخیره</button>
 </form>
+
+<div>
+    {% if form.errors %}
+        لطفا خطاهای زیر را اصلاح کنید !
+        <br>
+        {% for field in form %}
+            {% if field.errors %}
+                {% for error in field.errors %}
+                    {{ field.label }}: {{ error }}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    {% if form.non_field_errors %}
+        {{ form.non_field_errors }}
+    {% endif %}
+</div>
+
 </body>
 </html>

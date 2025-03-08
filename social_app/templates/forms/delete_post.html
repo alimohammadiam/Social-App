@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete post</title>
+</head>
+<body>
+
+    <h2>آیا از حذف پست "{{ post.title }}" مطمئن هستید؟</h2>
+    <a href="{% url 'social:profile' %}">بازگشت به صفحه پروفایل</a>
+    <br>
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="submit" value="حذف">
+    </form>
+
+</body>
+</html>

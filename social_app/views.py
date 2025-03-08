@@ -50,6 +50,7 @@ def user_edit(request):
         user_form = UserEditForm(request.POST, instance=request.user, files=request.FILES)
         if user_form.is_valid():
             user_form.save()
+            redirect('social:profile')
     else:
         user_form = UserEditForm(instance=request.user)
     context = {
@@ -172,6 +173,60 @@ def post_comment(request, post_id):
         'form': form
     }
     return render(request, 'forms/comment.html', context)
+
+
+@login_required()
+def delete_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.method == 'POST':
+        post.delete()
+        return redirect('social:profile')
+    return render(request, 'forms/delete_post.html', {'post': post})
+
+
+@login_required()
+def edit_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.method == 'POST':
+        form = CreatePostForm(request.POST, request.FILES, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            form.save_m2m()
+
+            Image.objects.create(image_field=form.cleaned_data['image1'], post=post)
+            Image.objects.create(image_field=form.cleaned_data['image2'], post=post)
+
+            redirect('social:profile')
+    else:
+        form = CreatePostForm(instance=post)
+    contex = {
+        'post': post,
+        'form': form,
+    }
+    return render(request, 'forms/create-post.html', contex)
+
+
+@login_required
+def delete_image(request, image_id):
+    image = get_object_or_404(Image, id=image_id)
+    image.delete()
+    return redirect('social:profile')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

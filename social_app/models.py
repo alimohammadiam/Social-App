@@ -1,3 +1,5 @@
+import os
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
@@ -36,6 +38,19 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('social:post_detail', args=[self.id])
 
+    # def save(self, *args, **kwargs):
+    #     self.slug = slugify(self.title)
+    #     super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        for img in self.images.all():
+            if img.image_field:
+                storage, path = img.image_field.storage, img.image_field.path
+                if os.path.exists(path):
+                    storage.delete(path)
+            img.delete()
+        super().delete(*args, **kwargs)
+
 
 class Comments(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments', verbose_name='پست')
@@ -64,6 +79,11 @@ class Image(models.Model):
     description = models.TextField(null=True, blank=True, verbose_name='توضیحات')
     created = models.DateTimeField(auto_now_add=True)
 
+    def delete(self, *args, **kwargs):
+        storage, path = self.image_field.storage, self.image_field.path
+        storage.delete(path)
+        super().delete(*args, **kwargs)
+
     class Meta:
         ordering = ['-created']
         indexes = [
@@ -74,15 +94,5 @@ class Image(models.Model):
 
     def __str__(self):
         return f'{self.title}' if self.title else f'{self.post.author}'
-
-
-
-
-
-
-
-
-
-
 
 
