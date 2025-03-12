@@ -2,7 +2,7 @@ from django.db.models import Count
 from django.shortcuts import render
 from django.contrib.auth import logout
 from django.shortcuts import redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .forms import *
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
@@ -11,6 +11,7 @@ from taggit.models import Tag
 from django.utils.html import escape
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.decorators.http import require_POST
 
 # Create your views here.
 
@@ -215,7 +216,32 @@ def delete_image(request, image_id):
     return redirect('social:profile')
 
 
+@login_required()
+@require_POST
+def like_post(request):
+    post_id = request.POST.get('post_id')
+    if post_id is not None:
+        post = get_object_or_404(Post, id=post_id)
+        user = request.user
 
+        if user in post.likes.all():
+            post.likes.remove(user)
+            liked = False
+
+        else:
+            post.likes.add(user)
+            liked = True
+
+        post_likes_count = post.likes.count()
+        response_date = {
+            'liked': liked,
+            'likes_count': post_likes_count,
+        }
+
+    else:
+        response_date = {'Error': 'Invalid post_id'}
+
+    return JsonResponse(response_date)
 
 
 

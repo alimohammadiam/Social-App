@@ -13,7 +13,25 @@
 
 
 {% for post in posts %}
-    <img width="300" height="200" src="{{ post.images.first.image_field.url }}" alt="{{ post.images.first.title }}">
+    <div>
+    {% if post.images.exists %}
+        {% if post.images.count > 1 %}
+            {% for img in post.images.all %}
+                {% if img.image_field %}  <!-- بررسی وجود فایل تصویر -->
+                    <img width="300px" height="200px" src="{{ img.image_field.url }}" alt="{{ img.title }}">
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            {% with post.images.first as img %}
+                {% if img.image_field %}  <!-- بررسی وجود فایل تصویر -->
+                    <img width="300px" height="200px" src="{{ img.image_field.url }}" alt="{{ img.title }}">
+                {% endif %}
+            {% endwith %}
+        {% endif %}
+    {% else %}  <!-- اگر عکسی وجود ندارد -->
+        <p>No images available.!!</p>
+    {% endif %}
+    </div>
     <a href="{{ post.get_absolute_url }}">
     {{ post.description|truncatewords:20|linebreaks }}
     </a>
