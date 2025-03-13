@@ -22,6 +22,7 @@ class Post(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     update = models.DateTimeField(auto_now=True)
     likes = models.ManyToManyField(User, related_name='liked_post', blank=True)
+    saved_by = models.ManyToManyField(User, related_name='saved_post')
     tags = TaggableManager()
 
     class Meta:

@@ -42,5 +42,42 @@
     <a href="{% url 'social:logout' %}">خروج</a>
     </div>
 
+<div>
+    <h2>پست های سیو شده توسط شما</h2>
+    <ul>
+<div id="post-list">
+{% for post_s in saved_posts %}
+    <div>
+    {% if post_s.images.exists %}
+        {% if post_s.images.count > 1 %}
+            {% for img in post_s.images.all %}
+                {% if img.image_field %}  <!-- بررسی وجود فایل تصویر -->
+                    <img width="300px" height="200px" src="{{ img.image_field.url }}" alt="{{ img.title }}">
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            {% with post_s.images.first as img %}
+                {% if img.image_field %}  <!-- بررسی وجود فایل تصویر -->
+                    <img width="300px" height="200px" src="{{ img.image_field.url }}" alt="{{ img.title }}">
+                {% endif %}
+            {% endwith %}
+        {% endif %}
+    {% else %}  <!-- اگر عکسی وجود ندارد -->
+        <p>No images available.!!</p>
+    {% endif %}
+    </div>
+    <a href="{{ post_s.get_absolute_url }}">
+    {{ post_s.description|truncatewords:20|linebreaks }}
+    </a>
+    Published as {{ post_s.created }} by {{ post_s.author }}
+    <br>
+    <br>
+    <hr>
+
+{% endfor %}
+</div> {# end load posts #}
+    </ul>
+</div>
+
 </body>
 </html>
