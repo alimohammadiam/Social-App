@@ -1,18 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>post list</title>
-</head>
-<body>
-{#{% include 'partials/header.html' %}#}
-
-{% if tag %}
-    Post tagged with {{ tag.name }}
-{% endif %}
-
-{#start load post#}
-<div id="post-list">
 {% for post in posts %}
     <div>
     {% if post.images.exists %}
@@ -47,32 +32,3 @@
     <hr>
 
 {% endfor %}
-</div> {# end load posts #}
-
-{#<hr>#}
-{#{% include 'partials/pagination.html' with page=posts %}#}
-{#<hr>#}
-
-<button id="load-more">بارگزاری بیشتر</button>
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script>
-    $(document).ready(function (){
-        var page = 2;
-        $('#load-more').click(function (){
-            $.ajax({
-                type : 'GET',
-                url : "{% if tag %}{% url 'social:post_list_by_tag' tag.slug %}{% else %}{% url 'social:post_list' %}{% endif %}" + "?page=" + page,
-                dataType : 'html',
-                success : function (data){
-                    $('#post-list').append(data);
-                    page += 1;
-                }
-            });
-        });
-    });
-</script>
-
-</body>
-</html>
