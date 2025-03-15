@@ -14,6 +14,7 @@ class User(AbstractUser):
     photo = models.ImageField(upload_to='account_images/', blank=True, null=True, verbose_name='عکس پروفایل')
     job = models.CharField(max_length=250, blank=True, null=True, verbose_name='شغل')
     phone = models.CharField(max_length=11, blank=True, null=True, verbose_name='شماره تلفن')
+    following = models.ManyToManyField('self', through='Contact', related_name='followers', symmetrical=False)
 
 
 class Post(models.Model):
@@ -98,3 +99,16 @@ class Image(models.Model):
         return f'{self.title}' if self.title else f'{self.post.author}'
 
 
+class Contact(models.Model):
+    user_from = models.ForeignKey(User, on_delete=models.CASCADE, related_name='rel_from_set')
+    user_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='rel_to_set')
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created']
+        indexes = [
+            models.Index(fields=['-created'])
+        ]
+
+    def __str__(self):
+        return f'{self.user_from} follow {self.user_to}'
