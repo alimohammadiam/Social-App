@@ -9,7 +9,6 @@ from django.core.mail import send_mail
 from .models import Post, Image
 from taggit.models import Tag
 from django.utils.html import escape
-from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.http import require_POST
 
@@ -221,7 +220,7 @@ def delete_image(request, image_id):
     return redirect('social:profile')
 
 
-@login_required()
+@login_required
 @require_POST
 def like_post(request):
     post_id = request.POST.get('post_id')
@@ -268,7 +267,10 @@ def save_post(request):
     return JsonResponse({'error': 'Invalid request'})
 
 
+def user_list(request):
+    users = User.objects.filter(is_active=True)
 
+    return render(request, 'user/user_list.html', {'users': users})
 
 
 

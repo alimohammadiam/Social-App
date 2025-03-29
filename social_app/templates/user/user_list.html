@@ -1,0 +1,16 @@
+{% load thumbnail %}
+{% load static %}
+
+{% for user in users %}
+    {% if user.photo %}
+        <a href="#">
+        <img src="{% thumbnail user.photo '200x0' quality=90 %}">
+        </a>
+    {% else %}
+        <img src="{% static 'images/profile/profile_pic.png' %}" style="width: 200px">
+    {% endif %}
+
+    <a href="#">
+        <p>{{ user.get_full_name }}</p>
+    </a>
+{% endfor %}
