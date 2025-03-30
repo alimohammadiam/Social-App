@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os.path
 from pathlib import Path
+from django.urls import reverse_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -151,3 +152,7 @@ EMAIL_HOST_PASSWORD = 'jfzz vtud ttti rodj'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 THUMBNAIL_DEBUG = True
+
+ABSOLUTE_URL_OVERRIDES = {
+    'social_app.user': lambda u: reverse_lazy('social:user_detail', args=[u.username])
+}

@@ -24,6 +24,11 @@
             <img src="{% static 'images/profile/profile_pic.png' %}" style="width: 200px">
         {% endif %}
     </div>
+    <div>
+        Bio: {{ user.bio }}
+        Job: {{ user.job }}
+        Date of birth: {{ user.date_of_birth }}
+    </div>
 </div>
 {% endwith %}
 

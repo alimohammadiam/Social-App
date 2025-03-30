@@ -273,6 +273,10 @@ def user_list(request):
     return render(request, 'user/user_list.html', {'users': users})
 
 
+def user_detail(request, username):
+    user = get_object_or_404(User, username=username, is_active=True)
+
+    return render(request, 'user/user_detail.html', {'user': user})
 
 
 

@@ -1,0 +1,25 @@
+{% load thumbnail %}
+{% load static %}
+
+<p>{{ user.get_full_name }}</p>
+
+<button>Follow\UnFollow</button>
+
+{% if user.photo %}
+    <a href="{{ user.photo.url }}">
+        <img src="{% thumbnail user.photo '150x0' quality=90 %}">
+    </a>
+{% else %}
+    <img src="{% static 'images/profile/profile_pic.png' %}" style="width: 150px">
+{% endif %}
+
+{% with total_followers=user.followers.count total_followings=user.following.count %}
+    <p>{{ total_followers }} Follower{{ total_followers|pluralize }}</p>
+    <p>{{ total_followings }} Following{{ total_followings|pluralize }}</p>
+{% endwith %}
+
+<div>
+    <p>Bio: {{ user.bio }}</p>
+    <p>Job: {{ user.job }}</p>
+    <p>Date of birth: {{ user.date_of_birth }}</p>
+</div>

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Post, Comments, Image
+from .models import User, Post, Comments, Image, Contact
 from django.contrib.auth.admin import UserAdmin
 
 # Register your models here.
@@ -46,3 +46,6 @@ class CommentsAdmin(admin.ModelAdmin):
 @admin.register(Image)
 class ImageAdmin(admin.ModelAdmin):
     list_display = ['title', 'description', 'created']
+
+
+admin.site.register(Contact)
