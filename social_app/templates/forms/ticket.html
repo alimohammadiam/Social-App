@@ -6,8 +6,18 @@
 </head>
 <body>
 
-{% if send %}
-    <h2>ایمیل شما به پشتیبانی ارسال شد ! </h2>
+{#{% if send %}#}
+{#    <h2>ایمیل شما به پشتیبانی ارسال شد ! </h2>#}
+{#{% endif %}#}
+{% if messages %}
+    <ul>
+    {% for message in messages %}
+        <li>
+            {{ message }}
+        </li>
+    {% endfor %}
+    </ul>
+
 {% endif %}
 
 <p>تیکت</p>
