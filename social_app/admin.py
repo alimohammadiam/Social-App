@@ -27,12 +27,29 @@ class UserAdmin(UserAdmin):
     )
 
 
+def make_deactivation(modeladmin, request, queryset):
+    result = queryset.update(active=False)
+    modeladmin.message_user(request, f'{result} Posts were deactivation')
+
+
+make_deactivation.short_description = 'رد پست'
+
+
+def make_activation(modeladmin, request, queryset):
+    result = queryset.update(active=True)
+    modeladmin.message_user(request, f'{result} Posts were activate')
+
+
+make_activation.short_description = "تایید پست"
+
+
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['author', 'created', 'update']
+    list_display = ['author', 'created', 'update', 'description']
     ordering = ['-created']
     search_fields = ['description']
     inlines = [ImageInline, CommentInline]
+    actions = [make_deactivation, make_activation]
 
 
 @admin.register(Comments)
