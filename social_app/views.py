@@ -305,10 +305,3 @@ def user_follow(request):
             return JsonResponse({'error': 'user does not exist'})
 
     return JsonResponse({'error': 'invalid request'})
-
-
-
-
-
-
-
