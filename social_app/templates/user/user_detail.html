@@ -3,6 +3,8 @@
 
 <p>{{ user.get_full_name }}</p>
 
+<a href="{% url 'chat:chat_view' user.username %}">chat</a>
+
 {% if request.user == user %}
     <button disabled>
         {% if request.user in user.followers.all %}
