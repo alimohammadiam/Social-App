@@ -1,7 +1,6 @@
 from django.db.models import Count
-from django.shortcuts import render
 from django.contrib.auth import logout
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import redirect, get_object_or_404, render
 from django.http import HttpResponse, JsonResponse
 from .forms import *
 from django.contrib.auth.decorators import login_required

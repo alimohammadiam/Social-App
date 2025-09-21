@@ -51,14 +51,12 @@
                 <td>{{ post.tags.all }}</td>
                 <td><a href="{% url 'social:edit_post' post.id %}">ویرایش</a></td>
                 <td><a href="{% url 'social:delete_post' post.id %}">حذف</a></td>
-
-
             </tr>
         {% endfor %}
     </table>
 </div>
 
-    <div>
+<div>
     <a href="{% url 'social:user_edit' %}" >تغییر اطلاعات</a>
     <br>
     <br>
@@ -66,7 +64,7 @@
     <br>
     <br>
     <a href="{% url 'social:logout' %}">خروج</a>
-    </div>
+</div>
 
 <div>
     <h2>پست های سیو شده توسط شما</h2>
